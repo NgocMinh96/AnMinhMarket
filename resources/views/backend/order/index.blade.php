@@ -3,92 +3,129 @@
     <link rel="stylesheet"
         href="{{ asset('assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.min.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+
+
+    </style>
 @endsection
 
 @section('wrapper')
     <div class="page-wrapper">
         <div class="page-content">
             {!! Form::breadcrumb('Đơn hàng') !!}
-            <div class="col-12">
+            <div class="col-lg-12">
                 <div class="card radius-10">
                     <div class="card-header">
                         <div class="d-flex align-items-center table-responsive p-1">
                             <a href="{{ route('backend.order.index') }}" class="btn btn-tool">
                                 <i class="lni lni-spinner-arrow bx-spin-hover text-option"></i>
                             </a>
-                            <form action="{{ route('backend.order.index') }}" method="GET">
-                                <div class="d-flex">
-                                    <select name="search_type" class="single-select" style="width: 120px;">
-                                        <option value="order_id" {{ old('search_type') == 'order_id' ? 'selected' : '' }}>
-                                            Mã đơn</option>
-                                        <option value="phone" {{ old('search_type') == 'phone' ? 'selected' : '' }}>Điện
-                                            thoại
-                                        </option>
-                                    </select>
-                                    <input name="search_value" type="text" class="form-control ms-1"
-                                        value="{{ old('search_value') }}" placeholder="Tìm kiếm ..."
-                                        style="width: 260px;">
-                                </div>
+                            <form action="{{ route('backend.order.index') }}" method="GET" class="d-flex w-100">
+                                <select name="search_type" class="single-select" style="width: 120px;">
+                                    <option value="order_id" {{ old('search_type') == 'order_id' ? 'selected' : '' }}>
+                                        Mã đơn</option>
+                                    <option value="phone" {{ old('search_type') == 'phone' ? 'selected' : '' }}>Điện
+                                        thoại
+                                    </option>
+                                </select>
+                                <input name="search_value" type="text" class="form-control ms-1"
+                                    value="{{ old('search_value') }}" placeholder="Tìm kiếm ..." style="width: 260px;">
+                                <button type="button" class="btn btn-sm btn-tool" data-bs-toggle="collapse"
+                                    href="#collapseExample" role="button" aria-expanded="false"
+                                    aria-controls="collapseExample">
+                                    <i class="bx bx-plus text-option"></i>
+                                </button>
                             </form>
-                            <button type="button" class="btn btn-sm btn-tool" data-bs-toggle="collapse"
-                                href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                <i class="bx bx-plus text-option"></i>
-                            </button>
                         </div>
                     </div>
                     <div class="collapse" id="collapseExample">
                         <div class="card-body">
-                            <div class="card-body">
-                                <form action="{{ url()->current() }}" method="GET" class="row g-2">
-                                    <div class="col-md-3">
-                                        <label class="form-label fw-bold">Từ ngày</label>
-                                        <input name="start" value="{{ old('start') }}" class="result form-control date"
-                                            placeholder="Chọn ngày">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label fw-bold">Đến ngày</label>
-                                        <input name="end" value="{{ old('end') }}" class="result form-control date"
-                                            placeholder="Chọn ngày">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label fw-bold">Trạng thái thanh toán</label>
-                                        <select name="payment_status" class="single-select">
-                                            <option value="" {{ old('payment_status') == '' ? 'selected' : '' }}>
-                                                Tất cả</option>
-                                            <option value="0" {{ old('payment_status') == '0' ? 'selected' : '' }}>
-                                                Chưa thanh toán</option>
-                                            <option value="1" {{ old('payment_status') == '1' ? 'selected' : '' }}>
-                                                Đã thanh toán
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label fw-bold">Trạng thái đơn hàng</label>
-                                        <select name="order_status" class="single-select">
-                                            <option value="" {{ old('order_status') == '' ? 'selected' : '' }}>
-                                                Tất cả</option>
-                                            <option value="0" {{ old('order_status') == '0' ? 'selected' : '' }}>
-                                                Đang xử lý</option>
-                                            <option value="1" {{ old('order_status') == '1' ? 'selected' : '' }}>
-                                                Hoàn thành
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="d-flex justify-content-center mt-3">
-                                        {!! Form::btn_submit('', 'bx bx-search') !!}
-                                    </div>
-                                </form>
-                            </div>
+                            <form action="{{ url()->current() }}" method="GET" class="row g-2">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Từ ngày</label>
+                                    <input name="start" value="{{ old('start') }}" class="result form-control date"
+                                        placeholder="Chọn ngày">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Đến ngày</label>
+                                    <input name="end" value="{{ old('end') }}" class="result form-control date"
+                                        placeholder="Chọn ngày">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Trạng thái thanh toán</label>
+                                    <select name="payment_status" class="single-select">
+                                        <option value="" {{ old('payment_status') == '' ? 'selected' : '' }}>
+                                            Tất cả</option>
+                                        <option value="0" {{ old('payment_status') == '0' ? 'selected' : '' }}>
+                                            Chưa thanh toán</option>
+                                        <option value="1" {{ old('payment_status') == '1' ? 'selected' : '' }}>
+                                            Đã thanh toán
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Trạng thái đơn hàng</label>
+                                    <select name="order_status" class="single-select">
+                                        <option value="" {{ old('order_status') == '' ? 'selected' : '' }}>
+                                            Tất cả</option>
+                                        <option value="0" {{ old('order_status') == '0' ? 'selected' : '' }}>
+                                            Đang xử lý</option>
+                                        <option value="1" {{ old('order_status') == '1' ? 'selected' : '' }}>
+                                            Hoàn thành
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="d-flex justify-content-center mt-3">
+                                    {!! Form::btn_submit('', 'bx bx-search') !!}
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
 
                 <div class="card radius-10">
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="fw-bold fs-6 me-2">Tác vụ</span>
+                            <div class="dropdown">
+                                <a class="btn btn-sm dropdown-toggle dropdown-toggle-nocaret" href="#"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Thanh toán
+                                </a>
+                                <ul class="dropdown-menu" style="margin: 0px;">
+                                    <li><a class="dropdown-item" onclick="bulkAction('payment_status', 1)">Đã thanh
+                                            toán</a>
+                                    </li>
+                                    <li><a class="dropdown-item" onclick="bulkAction('payment_status', 0)">Chưa thanh
+                                            toán</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="dropdown">
+                                <a class="btn btn-sm dropdown-toggle dropdown-toggle-nocaret" href="#"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Đơn hàng
+                                </a>
+                                <ul class="dropdown-menu" style="margin: 0px;">
+                                    <li><a class="dropdown-item" onclick="bulkAction('order_status', 1)">Hoàn thành</a>
+                                    </li>
+                                    <li><a class="dropdown-item" onclick="bulkAction('order_status', 0)">Đang xử lý</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-sm" onclick="bulkAction('destroy')">Xóa</button>
+                        </div>
+                        <div class="table-responsive scroll-touch">
                             <table class="table align-middle mb-0">
                                 <thead class="table-light">
                                     <tr class="align-middle">
+                                        <th>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="check-all"
+                                                    name="checkbox[]" value="">
+                                                <label for="check-all" class="form-check-label"></label>
+                                            </div>
+                                        </th>
                                         <th class="text-center">Mã đơn hàng</th>
                                         <th class="">Thông tin khách hàng</th>
                                         <th class="text-center">Sản phẩm</th>
@@ -103,6 +140,15 @@
                                 <tbody>
                                     @foreach ($orders as $item)
                                         <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="checkbox-{{ $item->id }}" name="checkbox[]"
+                                                        value="{{ $item->id }}">
+                                                    <label for="checkbox-{{ $item->id }}"
+                                                        class="form-check-label"></label>
+                                                </div>
+                                            </td>
                                             <td>
                                                 <p class="">#{{ $item->order_id }}</p>
                                                 <p class="text-center mb-0">
@@ -187,6 +233,7 @@
                         </div>
                     </div>
                 </div>
+                {!! Form::row_pagination(route('backend.order.index'), 'order_row', $orders) !!}
             </div>
         </div>
     </div>
@@ -259,6 +306,50 @@
                     round_noti('warning', 'Bạn chưa được cấp quyền thực hiện')
                 },
             })
+        }
+
+        const bulkAction = (option, status = null) => {
+            var ids = [];
+            $.each($('input[name="checkbox[]"]:checked'), function() {
+                ids.push($(this).val());
+            })
+            var url = ''
+            if (ids.length <= 0) {
+                round_noti('warning', 'Vui lòng chọn dữ liệu trước khi thực hiện')
+            } else {
+                switch (option) {
+                    case 'destroy':
+                        question = 'Bạn có đồng ý xóa các dữ liệu đã chọn?'
+                        break;
+                    case 'payment_status':
+                        question = 'Bạn có đồng thay đổi trạng thái thanh toán?'
+                        break;
+                    case 'order_status':
+                        question = 'Bạn có đồng ý thay đổi trạng thái đơn hàng?'
+                        break;
+                }
+
+                return setSwal(question).then((result) => {
+                    if (result.isConfirmed) {
+                        ajaxToken()
+                        $.ajax({
+                            url: "{{ route('backend.order.bulkAction') }}",
+                            type: 'PATCH',
+                            data: {
+                                option: option,
+                                ids: ids,
+                                status: status
+                            },
+                            success: function(data) {
+                                window.location = "{{ route('backend.order.index') }}"
+                            },
+                            error: function(xhr, status, error) {
+                                window.location = "{{ route('backend.order.index') }}"
+                            },
+                        })
+                    }
+                })
+            }
         }
     </script>
 @endsection

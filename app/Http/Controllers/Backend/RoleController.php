@@ -132,7 +132,12 @@ class RoleController extends Controller
 	 */
 	public function destroy($id)
 	{
-		Role::destroy($id);
-		return redirect()->back()->with('success', 'Xóa dữ liệu thành công');
+		$role = Role::find($id);
+		if ($role->slug == 'admin') {
+			return redirect()->back()->with('error', 'Không thể xóa vai trò này');
+		} else {
+			Role::destroy($id);
+			return redirect()->back()->with('success', 'Xóa dữ liệu thành công');
+		}
 	}
 }

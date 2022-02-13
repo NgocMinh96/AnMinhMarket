@@ -67,6 +67,10 @@ Route::prefix('admin')->name('backend.')->group(function () {
                 ->middleware('permission:post-list-update')->name('update');
             Route::delete('{id}', [Backend\PostListController::class, 'destroy'])
                 ->middleware('permission:post-list-destroy')->name('destroy');
+            // bulk action
+            Route::patch('bulkAction', [Backend\PostListController::class, 'bulkAction'])
+                ->middleware(['permission:post-list-update'])
+                ->name('bulkAction');
         });
 
         Route::prefix('product-category')->name('productcategory.')->group(function () {
@@ -97,6 +101,10 @@ Route::prefix('admin')->name('backend.')->group(function () {
                 ->middleware('permission:product-list-update')->name('update');
             Route::delete('{id}', [Backend\ProductListController::class, 'destroy'])
                 ->middleware('permission:product-list-destroy')->name('destroy');
+            //bulk action
+            Route::patch('bulkAction', [Backend\ProductListController::class, 'bulkAction'])
+                ->middleware(['permission:product-list-update'])
+                ->name('bulkAction');
         });
 
         Route::prefix('product-image')->name('productimage.')->group(function () {
@@ -148,12 +156,17 @@ Route::prefix('admin')->name('backend.')->group(function () {
             Route::delete('{id}', [Backend\OrderController::class, 'destroy'])
                 ->middleware(['permission:order-destroy'])
                 ->name('destroy');
+            // ajax status action
             Route::put('changePaymentStatus', [Backend\OrderController::class, 'changePaymentStatus'])
                 ->middleware(['permission:order-change-status'])
                 ->name('changePaymentStatus');
             Route::put('changeOrderStatus', [Backend\OrderController::class, 'changeOrderStatus'])
                 ->middleware(['permission:order-change-status'])
                 ->name('changeOrderStatus');
+            // bulk action
+            Route::patch('bulkAction', [Backend\OrderController::class, 'bulkAction'])
+                ->middleware(['permission:order-change-status'])
+                ->name('bulkAction');
         });
 
         // Route::resource('user', Backend\UserController::class)->except('show');

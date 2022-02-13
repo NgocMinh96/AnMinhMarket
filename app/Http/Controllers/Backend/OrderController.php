@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\ProductList;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\OrderList;
 use App\Models\OrderProduct;
 use App\Models\Ward;
+use Exception;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -151,5 +151,23 @@ class OrderController extends Controller
         OrderList::where('id', $request->id)->update([
             'order_status' => $request->status
         ]);
+    }
+
+    public function bulkAction(Request $request)
+    {
+        switch ($request->option) {
+            case 'destroy':
+                OrderList::destroy($request->ids);
+                Session::flash('success', 'Xóa dữ liệu thành công');
+                break;
+            case 'payment_status':
+                OrderList::whereIn('id', $request->ids)->update(['payment_status' => $request->status]);
+                Session::flash('success', 'Đã cập nhật trạng thái thanh toán');
+                break;
+            case 'order_status':
+                OrderList::whereIn('id', $request->ids)->update(['order_status' => $request->status]);
+                Session::flash('success', 'Đã cập nhật trạng thái đơn hàng');
+                break;
+        }
     }
 }

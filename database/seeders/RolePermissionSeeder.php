@@ -19,8 +19,7 @@ class RolePermissionSeeder extends Seeder
     {
         DB::table('roles')->insert([
             ['name' => 'Admin', 'slug' => 'admin'],
-            ['name' => 'Manager', 'slug' => 'manager'],
-            ['name' => 'Writter', 'slug' => 'writter'],
+            ['name' => 'Viewer', 'slug' => 'viewer'],
         ]);
 
         DB::table('permissions')->insert([
@@ -66,24 +65,37 @@ class RolePermissionSeeder extends Seeder
 
             ['name' => 'Order View', 'slug' => 'order-view', 'description' => 'Xem đơn hàng'],
             ['name' => 'Order Invoice', 'slug' => 'order-invoice', 'description' => 'Xem hóa đơn'],
+            ['name' => 'Order Update', 'slug' => 'order-update', 'description' => 'Sửa đơn hàng'],
             ['name' => 'Order Destroy', 'slug' => 'order-destroy', 'description' => 'Xóa đơn hàng'],
-            ['name' => 'Order Change Status', 'slug' => 'order-change-status', 'description' => 'Cập nhật trạng thái đơn hàng'],
 
             ['name' => 'Setting View', 'slug' => 'setting-view', 'description' => 'Xem cài đặt'],
             ['name' => 'Setting Update', 'slug' => 'setting-update', 'description' => 'Sửa cài đặt'],
         ]);
 
-        $role = Role::where('slug', 'admin')->first();
+        //create user admin
+        $roleAdmin = Role::where('slug', 'admin')->first();
         for ($i = 1; $i <= 38; $i++) {
-            $role->permissions()->attach($i);
+            $roleAdmin->permissions()->attach($i);
         }
-
-        $user = Admin::create([
+        $userAdmin = Admin::create([
             'username'  => 'admin',
             'name'      => 'ADMIN',
             'password'  => Hash::make('123123'),
             'status'    => 1,
         ]);
-        $user->roles()->attach($role);
+        $userAdmin->roles()->attach($roleAdmin);
+
+        //create user viewer
+        $roleViewer = Role::where('slug', 'viewer')->first();
+        for ($i = 1; $i <= 38; $i += 4) {
+            $roleViewer->permissions()->attach($i);
+        }
+        $userViewer = Admin::create([
+            'username'  => 'viewer',
+            'name'      => 'VIEWER',
+            'password'  => Hash::make('123123'),
+            'status'    => 1,
+        ]);
+        $userViewer->roles()->attach($roleViewer);
     }
 }

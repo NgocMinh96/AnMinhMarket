@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProductCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,9 +15,11 @@ class ProductCategorySeeder extends Seeder
      */
     public function run()
     {
-        DB::table('product_categories')->insert([
-            ['name' => 'Danh Mục 1', 'slug' => 'danh-muc-1', 'status' => 1],
-            ['name' => 'Danh Mục 2', 'slug' => 'danh-muc-1', 'status' => 1],
-        ]);
+        // DB::table('product_categories')->insert([
+        //     ['name' => 'Danh Mục 1', 'slug' => 'danh-muc-1', 'status' => 1],
+        //     ['name' => 'Danh Mục 2', 'slug' => 'danh-muc-1', 'status' => 1],
+        // ]);
+
+        ProductCategory::factory(5)->create();
     }
 }

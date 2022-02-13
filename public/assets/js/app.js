@@ -135,7 +135,6 @@ if (bgColor == 'dark') {
 	$("html").attr("class", "light-theme")
 }
 
-
 $("#SwitchBG").click(function () {
 	var checkState = $("#SwitchBG").is(":checked") ? true : false;
 	if (checkState == true) {
@@ -145,6 +144,36 @@ $("#SwitchBG").click(function () {
 		$("html").attr("class", "light-theme")
 		localStorage.setItem("SwitchBG", "light");
 	}
+})
+
+//show,hide sidebar
+$(".wrapper").addClass(localStorage.getItem("sidebarState"))
+const sidebarHide = () => {
+	$(".toggle-logo img").addClass("d-none"), $(".icon-logo").removeClass("d-none")
+}
+const sidebarShow = () => {
+	$(".toggle-logo img").removeClass("d-none"), $(".icon-logo").addClass("d-none")
+}
+const sidebarHover = () => {
+	$(".sidebar-wrapper").hover(function () {
+		$(".wrapper").addClass("sidebar-hovered"), sidebarShow()
+	}, function () {
+		$(".wrapper").removeClass("sidebar-hovered"), sidebarHide()
+		if (!$(".wrapper").hasClass("toggled")) {
+			sidebarShow()
+		}
+	})
+}
+
+$(".wrapper").hasClass("toggled") ? sidebarHide() : sidebarShow()
+sidebarHover()
+
+$(".toggle-logo").click(function () {
+	// console.log(localStorage.getItem("sidebarState"))
+	localStorage.getItem("sidebarState") == "" ? localStorage.setItem("sidebarState", "toggled") : localStorage.setItem("sidebarState", "")
+	$(".wrapper").hasClass("toggled")
+		? ($(".wrapper").removeClass("toggled"), $(".sidebar-wrapper").unbind("hover"))
+		: ($(".wrapper").addClass("toggled"), sidebarHover())
 })
 
 //select2
@@ -179,10 +208,10 @@ $('select[name="author"]').select2({
 
 // $('b[role="presentation"]').hide();
 
-
 // checked all
 $("#check-all").change((function () {
 	var t = this.checked;
+	console.log(t)
 	$('input[name="checkbox[]"]').each((function () {
 		this.checked = t
 	}))
@@ -245,7 +274,7 @@ function setSwal(t = 'Bạn có đồng ý xóa dữ liệu này ?', n = "questi
 	})
 }
 
-//destroy submit form
+//destroy on button trash in table
 function destroy(path) {
 	return setSwal().then((result) => {
 		if (result.isConfirmed) {
@@ -255,29 +284,6 @@ function destroy(path) {
 		}
 	})
 }
-
-//update submit form
-function update(path) {
-	$('#update').submit()
-}
-
-$(".toggle-logo").click(function () {
-	$(".wrapper").hasClass("toggled")
-		? ($(".wrapper").removeClass("toggled"), $(".sidebar-wrapper").unbind("hover"))
-		: ($(".wrapper").addClass("toggled"), $(".sidebar-wrapper").hover(function () {
-			$(".wrapper").addClass("sidebar-hovered")
-			$(".icon-logo").addClass("d-none")
-			$(".toggle-logo img").removeClass("d-none")
-		}, function () {
-			$(".wrapper").removeClass("sidebar-hovered")
-			$(".icon-logo").removeClass("d-none")
-			$(".toggle-logo img").addClass("d-none")
-			if (!$(".wrapper").hasClass("toggled")) {
-				$(".icon-logo").addClass("d-none")
-				$(".toggle-logo img").removeClass("d-none")
-			}
-		}))
-})
 
 function chuyenso(conso) {
 	var s09 = ["", " một", " hai", " ba", " bốn", " năm", " sáu", " bảy", " tám", " chín"];

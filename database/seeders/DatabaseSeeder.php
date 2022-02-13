@@ -2,11 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Coupon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ProductCategorySeeder::class,
             ProductListSeeder::class,
             CouponSeeder::class,
+            OrderSeeder::class,
         ]);
     }
 }

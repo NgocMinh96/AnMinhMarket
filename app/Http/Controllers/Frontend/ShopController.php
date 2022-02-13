@@ -23,7 +23,7 @@ class ShopController extends Controller
         if (isset($request->sort_price)) $product->orderBy('price', $request->sort_price);
         if (isset($request->sort_sale)) $product->where('sale', '>', 0)->orderBy('sale', 'DESC');
 
-        $product = $product->paginate(9);
+        $product = $product->paginate(env('PAGINATION_CLIENT_PRODUCT'));
         session()->flashInput($request->input());
         return view('frontend.shop.index', compact('category', 'product'));
     }
@@ -38,8 +38,8 @@ class ShopController extends Controller
     {
         $product = ProductList::select('*')->where('id', $id)->first();
         // dd($product->categories[0]->name);
-        $product_previous =  ProductList::select('*')->where('id', '<',$id)->orderBy('id','desc')->first();
-        $product_next =  ProductList::select('*')->where('id', '>',$id)->orderBy('id','asc')->first();
+        $product_previous =  ProductList::select('*')->where('id', '<', $id)->orderBy('id', 'desc')->first();
+        $product_next =  ProductList::select('*')->where('id', '>', $id)->orderBy('id', 'asc')->first();
         return view('frontend.shop.show', compact('product', 'product_previous', 'product_next'));
     }
 

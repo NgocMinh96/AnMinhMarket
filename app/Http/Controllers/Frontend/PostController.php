@@ -20,7 +20,7 @@ class PostController extends Controller
             ->orderBy('created_at', 'DESC');
 
         if (isset($request->search_value)) $postList->where("title", 'like', "%$request->search_value%");
-        $postList = $postList->paginate(8);
+        $postList = $postList->paginate(env('PAGINATION_CLIENT_POST'));
 
         $postSpecial = PostList::select('*')->where('status', 1)->where('special', 1)->limit(5)->get();
 

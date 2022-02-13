@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\ProductList;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
-
+use Illuminate\Support\Facades\Session;
 
 class ProductListController extends Controller
 {
@@ -220,13 +220,32 @@ class ProductListController extends Controller
 		$product = ProductList::find($id);
 		foreach ($product->images as $value) {
 			$image_path = 'images/' . $value->image;
-			if (file_exists($image_path)) {
+			// sp.jpg để test dữ liệu nên không xóa
+			if (file_exists($image_path) && substr($value->image, 0, 2) != 'sp') {
 				@unlink($image_path);
 			}
 		}
-		ProductImage::destroy($product->images);
+		ProductImage::destroy($product);
 		$product->delete();
 
 		return redirect()->back()->with('success', 'Xóa dữ liệu thành công');
+	}
+
+	public function bulkAction(Request $request)
+	{
+		switch ($request->option) {
+			case 'destroy':
+				ProductList::destroy($request->ids);
+				Session::flash('success', 'Xóa dữ liệu thành công');
+				break;
+			case 'status':
+				ProductList::whereIn('id', $request->ids)->update(['status' => $request->status]);
+				Session::flash('success', 'Đã cập nhật trạng thái sản phẩm');
+				break;
+			case 'special':
+				ProductList::whereIn('id', $request->ids)->update(['special' => $request->status]);
+				Session::flash('success', 'Đã cập nhật nổi bật sản phẩm');
+				break;
+		}
 	}
 }

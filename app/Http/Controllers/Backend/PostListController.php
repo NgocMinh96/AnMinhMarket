@@ -7,6 +7,7 @@ use App\Models\PostList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 
 class PostListController extends Controller
 {
@@ -200,15 +201,34 @@ class PostListController extends Controller
     public function destroy(Request $request, $id)
     {
         if ($request->user()->hasRole('admin')) {
-            $data = PostList::find($id);
-            $image_path = 'images/' . $data->image;
-            if (file_exists($image_path)) {
+            $post = PostList::find($id);
+            $image_path = 'images/' . $post->image;
+            // post.jpg để test dữ liệu không xóa
+            if (file_exists($image_path) && substr($post->image, 0, 4) != 'post') {
                 @unlink($image_path);
             }
             PostList::destroy($id);
             return redirect()->back()->with('success', 'Xóa dữ liệu thành công');
         } else {
             return redirect()->back()->with('warning', 'Bạn không có quyền xóa bài viết');
+        }
+    }
+
+    public function bulkAction(Request $request)
+    {
+        switch ($request->option) {
+            case 'destroy':
+                PostList::destroy($request->ids);
+                Session::flash('success', 'Xóa dữ liệu thành công');
+                break;
+            case 'status':
+                PostList::whereIn('id', $request->ids)->update(['status' => $request->status]);
+                Session::flash('success', 'Đã cập nhật trạng thái bài viết');
+                break;
+            case 'special':
+                PostList::whereIn('id', $request->ids)->update(['special' => $request->status]);
+                Session::flash('success', 'Đã cập nhật nổi bật bài viết');
+                break;
         }
     }
 }

@@ -68,10 +68,11 @@ class AppServiceProvider extends ServiceProvider
                 </div><hr>';
         });
 
+        //ROW_PAGINATION
         FormBuilder::macro('row_pagination', function ($route, $session, $pagination) {
             $form = "'form'";
             $option = '';
-            for ($i = 10; $i <= 50; $i += 20) {
+            for ($i = env('PAGINATION'); $i <= env('PAGINATION') * env('PAGINATION_ROW'); $i += env('PAGINATION')) {
                 $option .= '<option value="' . $i . '" ' . (session($session) == $i ? "selected" : "") . '>' . $i . '</option>';
             }
             return

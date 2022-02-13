@@ -86,33 +86,52 @@
 
                 <div class="card radius-10">
                     <div class="card-body">
-                        {{-- <div class="d-flex align-items-center">
-                            <div class="dropdown ms-start">
-                                <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"
-                                    aria-expanded="false"><i class="bx bx-dots-horizontal-rounded font-22 text-option"></i>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="fw-bold fs-6 me-2">Tác vụ</span>
+                            <div class="dropdown">
+                                <a class="btn btn-sm dropdown-toggle dropdown-toggle-nocaret" href="#"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Trạng thái
                                 </a>
                                 <ul class="dropdown-menu" style="margin: 0px;">
-                                    <li><a class="dropdown-item" href="javascript:;">Hoạt động</a>
+                                    <li><a class="dropdown-item" onclick="bulkAction('status', 1)">Hiện</a>
                                     </li>
-                                    <li><a class="dropdown-item" href="javascript:;">Không hoạt động</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="javascript:;">Xóa</a>
+                                    <li><a class="dropdown-item" onclick="bulkAction('status', 0)">Ẩn</a>
                                     </li>
                                 </ul>
                             </div>
-                        </div> --}}
+                            <div class="dropdown">
+                                <a class="btn btn-sm dropdown-toggle dropdown-toggle-nocaret" href="#"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Nổi bật
+                                </a>
+                                <ul class="dropdown-menu" style="margin: 0px;">
+                                    <li><a class="dropdown-item" onclick="bulkAction('special', 1)">Có</a>
+                                    </li>
+                                    <li><a class="dropdown-item" onclick="bulkAction('special', 0)">Không</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-sm" onclick="bulkAction('destroy')">Xóa</button>
+                        </div>
                         <div class="table-responsive">
                             <table class="table align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        {{-- <th style="width: 10px"></th> --}}
+                                        <th>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="check-all"
+                                                    name="checkbox[]" value="">
+                                                <label for="check-all" class="form-check-label"></label>
+                                            </div>
+                                        </th>
                                         <th>Hình ảnh</th>
                                         <th>Sản phẩm</th>
                                         <th>Giá bán</th>
                                         <th>Giảm giá</th>
                                         <th class="text-center">Thứ tự</th>
                                         <th>Trạng thái</th>
-                                        <th>Đặc biệt</th>
+                                        <th>Nổi bật</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
@@ -120,15 +139,15 @@
                                 <tbody id="load-data">
                                     @foreach ($products as $item)
                                         <tr>
-                                            {{-- <td>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input class="custom-control-input" type="checkbox"
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox"
                                                         id="checkbox-{{ $item->id }}" name="checkbox[]"
                                                         value="{{ $item->id }}">
                                                     <label for="checkbox-{{ $item->id }}"
-                                                        class="custom-control-label"></label>
+                                                        class="form-check-label"></label>
                                                 </div>
-                                            </td> --}}
+                                            </td>
                                             <td>
                                                 @if (isset($item->images[0]))
                                                     <a>
@@ -200,4 +219,55 @@
         @csrf
         @method('DELETE')
     </form>
+
+    <script>
+        const bulkAction = (option, status = null) => {
+            var ids = [];
+            $.each($('input[name="checkbox[]"]:checked'), function() {
+                ids.push($(this).val());
+            })
+            var url = ''
+            if (ids.length <= 0) {
+                round_noti('warning', 'Vui lòng chọn dữ liệu trước khi thực hiện')
+            } else {
+                switch (option) {
+                    case 'destroy':
+                        question = 'Bạn có đồng ý xóa các dữ liệu đã chọn?'
+                        break;
+                    case 'status':
+                        question = 'Bạn có đồng thay đổi trạng thái sản phẩm?'
+                        break;
+                    case 'special':
+                        question = 'Bạn có đồng ý thay đổi nổi bật sản phẩm?'
+                        break;
+                }
+
+                return setSwal(question).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                        $.ajax({
+                            url: "{{ route('backend.productlist.bulkAction') }}",
+                            type: 'PATCH',
+                            data: {
+                                option: option,
+                                ids: ids,
+                                status: status
+                            },
+                            success: function(data) {
+                                console.log(data)
+                                window.location = "{{ route('backend.productlist.index') }}"
+                            },
+                            error: function(xhr, status, error) {
+                                window.location = "{{ route('backend.productlist.index') }}"
+                            },
+                        })
+                    }
+                })
+            }
+        }
+    </script>
 @endsection
